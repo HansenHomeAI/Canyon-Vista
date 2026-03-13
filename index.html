@@ -1501,7 +1501,7 @@
     // Parameters
     const parameters = {
         camera: {
-            minY: -0.14,
+            minY: -2,
             maxZoomOut: 1000,
             startPosition: { x: 0.2, y: 0.55, z: 2.8 },
         },
@@ -1834,7 +1834,7 @@
                 minDistance: 0.65,
                 maxDistance: 10.4,
                 minPolarAngle: 14,
-                maxPolarAngle: 84,
+                maxPolarAngle: 179,  // allow camera to orbit below target (descend into canyons) down to minY
                 northDirection: 358
             },
             animation: {
@@ -3365,17 +3365,21 @@
         updateTapFocusTransition(now);
         updateTapFocusFeedback(now);
 
-        // Min Y: sync orbit polar limit so floor is consistent at all distances
+        // Min Y: sync orbit polar limit. When minY >= targetY, cap polar so camera can't go below minY.
+        // When minY < targetY, allow full descent (maxPolarAngle ~180°) so user can orbit below target down to minY.
         const activeConfig = getActiveHoleConfig();
         const targetY = activeConfig?.view?.target?.y ?? parameters.scene.origin.y;
         const minY = parameters.camera.minY;
         const distance = camera.position.distanceTo(controls.target);
         const heightAboveTarget = minY - targetY;
-        if (distance > 0.01 && heightAboveTarget > 0 && heightAboveTarget <= distance) {
+        if (heightAboveTarget <= 0) {
+            // minY is below target: allow camera to orbit below target (full sphere, down to minY)
+            controls.maxPolarAngle = Math.PI - 0.01;
+        } else if (distance > 0.01 && heightAboveTarget <= distance) {
             const polarForMinY = Math.acos(heightAboveTarget / distance);
             const polarForMinYDeg = MathUtils.radToDeg(polarForMinY);
             const penetrationDeg = 10;
-            controls.maxPolarAngle = MathUtils.degToRad(Math.min(89, Math.max(30, polarForMinYDeg + penetrationDeg)));
+            controls.maxPolarAngle = MathUtils.degToRad(Math.min(179, Math.max(30, polarForMinYDeg + penetrationDeg)));
         }
 
         controls.update();
