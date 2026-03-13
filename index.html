@@ -1501,8 +1501,7 @@
     // Parameters
     const parameters = {
         camera: {
-            minHeightAboveTarget: 0.12,
-            minY: 0.14,
+            minY: -0.14,
             maxZoomOut: 1000,
             startPosition: { x: 0.2, y: 0.55, z: 2.8 },
         },
@@ -1785,11 +1784,8 @@
 
     controls.addEventListener('change', () => {
         if (typeof tapFocusTransition !== 'undefined' && tapFocusTransition.active) return;
-        // Min Y rebound: original simple lerp (from initial commit)
-        const activeConfig = getActiveHoleConfig();
-        const targetY = activeConfig?.view?.target?.y ?? parameters.scene.origin.y;
-        const minYFromTarget = targetY + parameters.camera.minHeightAboveTarget;
-        const minY = Math.max(parameters.camera.minY, minYFromTarget);
+        // Min Y rebound: global floor only
+        const minY = parameters.camera.minY;
         if (camera.position.y < minY) {
             const dist = camera.position.distanceTo(controls.target);
             const distanceScale = Math.min(3, Math.max(0.6, dist / 1.2));
@@ -3372,8 +3368,7 @@
         // Min Y: sync orbit polar limit so floor is consistent at all distances
         const activeConfig = getActiveHoleConfig();
         const targetY = activeConfig?.view?.target?.y ?? parameters.scene.origin.y;
-        const minYFromTarget = targetY + parameters.camera.minHeightAboveTarget;
-        const minY = Math.max(parameters.camera.minY, minYFromTarget);
+        const minY = parameters.camera.minY;
         const distance = camera.position.distanceTo(controls.target);
         const heightAboveTarget = minY - targetY;
         if (distance > 0.01 && heightAboveTarget > 0 && heightAboveTarget <= distance) {
