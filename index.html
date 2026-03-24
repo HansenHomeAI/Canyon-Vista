@@ -3431,7 +3431,7 @@
         if (labelsVisible) {
             const overlapPadding = 6;
             const opacityLerp = 0.18;
-            const labelMaxDistance = 3;  /* hide label when camera is medium-far or farther */
+            const labelMaxDistance = 1.5;  /* hide label when camera is medium-far or farther */
             function rectsOverlap(a, b) {
                 return !(a.right + overlapPadding <= b.left - overlapPadding ||
                     a.left - overlapPadding >= b.right + overlapPadding ||
