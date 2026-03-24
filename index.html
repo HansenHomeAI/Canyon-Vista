@@ -2073,7 +2073,7 @@
         const holeLabelButton = document.getElementById('holeLabelButton');
         if (!holeLabelText) return;
         const config = getActiveHoleConfig();
-        const label = config ? config.label : 'Hole 15';
+        const label = config ? config.label : 'Canyon Vista';
         holeLabelText.textContent = label;
         if (holeLabelButton) {
             holeLabelButton.setAttribute('aria-label', label);
@@ -4079,7 +4079,7 @@
         if (splatRotY) splatRotY.value = rot.y;
         if (splatRotZ) splatRotZ.value = rot.z;
         if (splatScale) splatScale.value = scaleVal;
-        if (splatEditorStatus) splatEditorStatus.textContent = 'Editing: ' + (getActiveHoleConfig()?.label || 'Hole 15');
+        if (splatEditorStatus) splatEditorStatus.textContent = 'Editing: ' + (getActiveHoleConfig()?.label || 'Canyon Vista');
     }
 
     function applySplatEditorToConfig() {
