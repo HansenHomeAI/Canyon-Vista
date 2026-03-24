@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Powder Mountain Development</title>
+    <title>Canyon Vista</title>
+    <meta name="description" content="Interactive 3D viewer for Canyon Vista Apartments in Draper, Utah, near Sandy and Silicon Slopes.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Fonts from original Shell.html -->
     <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue&display=swap" rel="stylesheet">
@@ -1361,7 +1362,7 @@
             <div class="lot-editor-title">Splat Transform</div>
             <button id="splatEditorCloseButton" class="animation-editor-close" type="button" aria-label="Close">×</button>
         </div>
-        <div id="splatEditorStatus" class="lot-editor-status animation-editor-status-compact">Editing: PMD-Slimmed</div>
+        <div id="splatEditorStatus" class="lot-editor-status animation-editor-status-compact">Editing: Canyon Vista</div>
         <div class="lot-editor-grid splat-editor-grid">
             <div class="lot-editor-field">
                 <label for="splatPosX">Pos X</label>
@@ -1458,11 +1459,11 @@
         </div>
         <div class="details-content" id="detailsContent">
             <div class="details-inner" id="detailsInner">
-                <h1>Powder Mountain Development</h1>
+                <h1>Canyon Vista</h1>
                 <hr style="border:none; border-top:1px solid rgba(255,255,255,0.4); margin:15px 0;">
                 <hr style="border:none; border-top:0px solid rgba(255,255,255,0.4); margin:13px 0;">
 
-                <p>Set within the Powder Mountain area of Eden, Utah, this development offers a rare opportunity to be part of one of the most distinctive mountain destinations in the West. Defined by direct access to skiing, trails, open space, and four-season recreation, the setting combines a strong sense of privacy and landscape with close proximity to the resort experience. For a 3D presentation, the value is not just in the buildings themselves, but in how the development sits within the broader mountain environment and lifestyle that make Powder Mountain so compelling.</p>
+                <p>Canyon Vista is a contemporary apartment community in Draper, Utah, just south of Sandy at the Point of the Mountain. Positioned for quick access to I-15, nearby TRAX, and the Silicon Slopes corridor, the property combines commuter convenience with Wasatch mountain views and a more residential setting. The community is centered on everyday livability, with modern interiors, in-home laundry, a resort-style pool and spa, fitness and yoga spaces, pickleball, play areas, and shared lounge amenities that support both workday routine and weekend downtime.</p>
 
                 <div class="legal-disclaimer">
                     <hr style="border:none; border-top:1px solid rgba(255,255,255,0.4); margin:30px 0;">
@@ -1718,8 +1719,8 @@
             base: 8.2,
             responsiveness: 1.4
         },
-        developerMode: false,  // Set this to true to activate developer mode
-        developerToolsVisible: false,  // Editor buttons (splat, lot, animation) in top right
+        developerMode: true,  // Set this to true to activate developer mode
+        developerToolsVisible: true,  // Editor buttons (splat, lot, animation) in top right
         splatEditor: {
             enabled: true,
             defaultOpen: false
@@ -1742,9 +1743,9 @@
     // Per-hole: each hole has its own tap dots (no cross-referencing between holes)
     const tapDotsConfig = { visible: true };  // Tap dot title overlay enabled
     const tapDotConfigurationsByHole = [
-        // PMD-Slimmed (single source)
+        // Canyon Vista (single source)
         [
-            { position: { x: -0.524709, y: 0.119, z: 0.364283 }, scale: 0.225, icon: 'info', /* caption: 'PMD-Slimmed', */ priority: 'low' },
+            { position: { x: -0.524709, y: 0.119, z: 0.364283 }, scale: 0.225, icon: 'info', /* caption: 'Canyon Vista', */ priority: 'low' },
         ],
     ];
 
@@ -1754,7 +1755,7 @@
     // Centralized control section for BorderDots and BorderLines (lot lines)
     // Per-hole: each hole has its own lot lines (no cross-referencing between holes)
     const borderDotPositionsByHole = [
-        // PMD-Slimmed (single source)
+        // Canyon Vista (single source)
         [
             { name: 'Lot_V1', position: { x: 0.619899, y: -0.07236, z: 0.910146 } },
             { name: 'Lot_V4', position: { x: 0.613988, y: -0.12955, z: -0.646242 } },
@@ -1781,7 +1782,7 @@
     ];
 
     const borderLineConnectionsByHole = [
-        // PMD-Slimmed (single source)
+        // Canyon Vista (single source)
         [
             { start: 'Lot_V1', end: 'Lot_V18' },
             { start: 'Lot_V18', end: 'Lot_V4' },
@@ -1927,12 +1928,12 @@
     // Developer mode toggle
     const developerMode = parameters.developerMode;
 
-    // Single splat source (PMD-Slimmed). No hole switching - one source only.
+    // Single splat source (Canyon Vista). No hole switching - one source only.
     const holeConfigurations = [
         {
-            id: 'pmd-slimmed',
-            label: 'PMD-Slimmed',
-            source: 'https://lumalabs.ai/embed/a15a52c1-ed66-4993-bbae-8634eed6dff9?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false',
+            id: 'canyon-vista',
+            label: 'Canyon Vista',
+            source: 'https://lumalabs.ai/embed/9dda6301-f17b-45c7-8e95-edfb6fd529a2?mode=sparkles&background=%23ffffff&color=%23000000&showTitle=true&loadBg=true&logoPosition=bottom-left&infoPosition=bottom-right&cinematicVideo=undefined&showMenu=false',
             revealDuration: 2.8,
             splat: {
                 position: { x: 0, y: 0.238, z: 0 },

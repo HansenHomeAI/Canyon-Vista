@@ -4,5 +4,6 @@
 # Editor
 .vscode/
 .idea/
+.codex/
 *.swp
 *.swo
