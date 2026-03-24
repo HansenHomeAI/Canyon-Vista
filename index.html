@@ -3716,7 +3716,8 @@
     const splatRotZ = document.getElementById('splatRotZ');
     const splatScale = document.getElementById('splatScale');
     const splatExportButton = document.getElementById('splatExportButton');
-    const tapDotGithubRawBase = 'https://raw.githubusercontent.com/HansenHomeAI/Red-Arrow-Ranch/main/3D%20Model%20Folders';
+    const tapDotGithubRawBase = 'https://raw.githubusercontent.com/HansenHomeAI/Canyon-Vista/main';
+    const legacyTapDotGithubRawBase = 'https://raw.githubusercontent.com/HansenHomeAI/Red-Arrow-Ranch/main/3D%20Model%20Folders';
 
     let isDetailsOpen = false;
     let isAnimatingToNorth = false;
@@ -3736,10 +3737,14 @@
             return photoSrc;
         }
         const normalized = String(photoSrc).replace(/\\/g, '/').replace(/^\.?\//, '');
+        if (normalized.startsWith('assets/')) {
+            const encodedPath = normalized.split('/').map((segment) => encodeURIComponent(segment)).join('/');
+            return `${tapDotGithubRawBase}/${encodedPath}`;
+        }
         if (normalized.startsWith('3D Model Folders/')) {
             const relativePath = normalized.slice('3D Model Folders/'.length);
             const encodedPath = relativePath.split('/').map((segment) => encodeURIComponent(segment)).join('/');
-            return `${tapDotGithubRawBase}/${encodedPath}`;
+            return `${legacyTapDotGithubRawBase}/${encodedPath}`;
         }
         try {
             return new URL(normalized, window.location.href).href;
