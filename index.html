@@ -40,7 +40,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 7;  /* above vignette (no z-index), below menu (10) so label visible in center */
+            z-index: 5;
         }
         #tap-focus-feedback {
             position: absolute;
@@ -63,52 +63,59 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            --tapdot-camera-size: 14px;
+            --tapdot-icon-only-size: 32px;
             gap: 6px;
-            padding: 8px 14px 12px;
+            padding: 7px 12px;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             font-size: 13px;
             font-weight: 500;
             color: rgba(255, 255, 255, 0.95);
             white-space: nowrap;
             box-sizing: border-box;
-            opacity: 0;  /* JS sets opacity via style; keep 0 as fallback until positioned */
+            opacity: 0;
             width: fit-content;
             min-width: 0;
             overflow: visible;
+            border-radius: 9999px;
             background: rgba(255, 255, 255, 0.25);
             -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 47' preserveAspectRatio='none'%3E%3Cpath d='M 21 0 L 119 0 Q 140 0 140 21 Q 140 42 119 42 L 74 42 L 70 47 L 66 42 L 21 42 Q 0 42 0 21 Q 0 0 21 0 Z' fill='white'/%3E%3C/svg%3E");
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 47' preserveAspectRatio='none'%3E%3Cpath d='M 21 0 L 119 0 Q 140 0 140 21 Q 140 42 119 42 L 74 42 L 70 47 L 66 42 L 21 42 Q 0 42 0 21 Q 0 0 21 0 Z' fill='white'/%3E%3C/svg%3E");
-            -webkit-mask-size: 100% 100%;
-            mask-size: 100% 100%;
-            -webkit-mask-position: 0 0;
-            mask-position: 0 0;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
         }
-        .tapdot-label-bubble .tapdot-label-bg {
+        .tapdot-label-bubble::before {
+            content: "";
             position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            background: linear-gradient(145deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 41%, rgba(255,255,255,0) 57%, rgba(255,255,255,0.4) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1.4px;
             pointer-events: none;
         }
-        .tapdot-label-bubble .tapdot-label-bg path {
-            fill: none;
-        }
-        .tapdot-label-bubble.has-camera {
-            padding-left: 12px;
-            padding-right: 16px;
+        .tapdot-label-bubble.icon-only {
+            padding: 0;
+            width: var(--tapdot-icon-only-size);
+            height: var(--tapdot-icon-only-size);
+            min-width: var(--tapdot-icon-only-size);
+            min-height: var(--tapdot-icon-only-size);
         }
         .tapdot-label-bubble .tapdot-camera-icon {
-            position: relative;
-            z-index: 1;
-            width: 16px;
-            height: 16px;
+            width: var(--tapdot-camera-size);
+            height: var(--tapdot-camera-size);
             object-fit: contain;
             flex-shrink: 0;
-            margin-top: -1px;
+            margin-top: calc((1em - var(--tapdot-camera-size)) / 2 - 0.5px);
+            margin-bottom: calc((1em - var(--tapdot-camera-size)) / 2 + 0.5px);
+            margin-right: -2px;
+        }
+        .tapdot-label-bubble.has-camera {
+            --tapdot-camera-size: 24px;
         }
         .tapdot-label-bubble .tapdot-label-text {
             position: relative;
@@ -2287,15 +2294,18 @@
 
         let labelEl = null;
         const tapDotEntry = { dot, iconMesh, color: dotColor, scale, index, holeIndex: holeIndex ?? 0, config, labelEl: null };
-        if (config.caption) {
+        const hasPhotos = !!(config.photos && config.photos.length) || !!config.photo;
+        const hasCaption = !!config.caption;
+        if (hasCaption || hasPhotos) {
             labelEl = document.createElement('div');
             labelEl.className = 'tapdot-label-bubble';
-            const hasPhotos = !!((config.photos && config.photos.length) || config.photo);
+            if (!hasCaption && hasPhotos) labelEl.classList.add('icon-only');
             if (hasPhotos) labelEl.classList.add('has-camera');
-            const gradId = 'labelOutline-' + index;
-            const pathD = 'M 21 0 L 119 0 Q 140 0 140 21 Q 140 42 119 42 L 74 42 L 70 47 L 66 42 L 21 42 Q 0 42 0 21 Q 0 0 21 0 Z';
-            const cameraIconHtml = hasPhotos ? '<img class="tapdot-camera-icon" src="https://raw.githubusercontent.com/HansenHomeAI/WhiteCameraIcon/main/3TestIcons-9.png" alt="" draggable="false">' : '';
-            labelEl.innerHTML = '<svg class="tapdot-label-bg" viewBox="0 0 140 47" preserveAspectRatio="none"><defs><linearGradient id="' + gradId + '" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(255,255,255,0.4)"/><stop offset="41%" stop-color="rgba(255,255,255,0)"/><stop offset="57%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0.4)"/></linearGradient></defs><path d="' + pathD + '" fill="none" stroke="url(#' + gradId + ')" stroke-width="1.4"/></svg>' + cameraIconHtml + '<span class="tapdot-label-text">' + config.caption + '</span>';
+            const cameraIconUrl = 'https://raw.githubusercontent.com/HansenHomeAI/WhiteCameraIcon/main/3TestIcons-9.png';
+            const parts = [];
+            if (hasPhotos) parts.push('<img class="tapdot-camera-icon" src="' + cameraIconUrl + '" alt="" draggable="false">');
+            if (hasCaption) parts.push('<span class="tapdot-label-text">' + config.caption + '</span>');
+            labelEl.innerHTML = parts.join('');
             tapDotEntry.labelEl = labelEl;
             const labelsLayer = document.getElementById('tapdot-labels-layer');
             if (labelsLayer) labelsLayer.appendChild(labelEl);
